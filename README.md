@@ -83,6 +83,8 @@ However, the above code misbehaves.  After 1 second, all 10 results arrive at th
 
 ## The Solution
 
+The solution is to move the responsibility of setting `operation.finished` to the block itself.
+
 Here is a revised version of `func doIt()` which solves this problem:
 
 ```swift
