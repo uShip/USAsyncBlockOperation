@@ -112,6 +112,14 @@ Note also the use of `[weak self, weak op]`, which prevents retain cycles.
 
 A more useful example would be rate-limiting our network requests, such that we only allow 3 requests in-flight at any one time.  When using `USAsyncBlockOperation`, this is as simple a setting `maxConcurrentOperationCount = 3`.
 
+## `USAsyncMainBlockOperation`
+
+Do not use `USAsyncBlockOperation` on `NSOperationQueue.mainQueue`.  Remember that `mainQueue` is a serial queue, and your long-running
+asynchronous operations will block the `mainQueue` while running one at a time.
+
+Instead, define a regular `NSOperationQueue`, but fill it with `USAsyncMainBlockOperation`.  These will immedately
+dispatch onto the main thread, but will also abide by the `maxConcurrentOperationCount` of your queue.
+
 ## See Also:
 
 * https://developer.apple.com/library/ios/documentation/Cocoa/Reference/NSOperation_class/
