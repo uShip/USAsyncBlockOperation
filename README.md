@@ -83,29 +83,9 @@ However, the above code misbehaves.  After 1 second, all 10 results arrive at th
 
 ## The Solution
 
-Here is a revised example which solves this problem.  By using `USAsyncBlockOperation`, the operations aren't considered to be "finished" until we set `asynchronousPortionIsFinished` to `true`, which happens after the network request returns.  Thus, the serial queue behaves as we expect (you see one result per second printed out in the console):
+Here is a revised version of `func doIt()` which solves this problem:
 
 ```swift
-import UIKit
-
-class ViewController: UIViewController
-{
-    let queue = SerialOperationQueue()
-    let service = SlowNetworkService()
-    
-    override func viewDidLoad()
-    {
-        super.viewDidLoad()
-        doItTenTimes()
-    }
-    
-    func doItTenTimes()
-    {
-        for _ in 1...10 {
-            doIt()
-        }
-    }
-    
     func doIt()
     {
         let op = USAsyncBlockOperation()
@@ -123,34 +103,9 @@ class ViewController: UIViewController
         queue.addOperation(op)
     }
 }
-
-class SerialOperationQueue: NSOperationQueue
-{
-    override init()
-    {
-        super.init()
-        self.maxConcurrentOperationCount = 1
-    }
-}
-
-class SlowNetworkService
-{
-    func getData(completion:((data: String)->()))
-    {
-        dispatch_after(1.0, queue: dispatch_get_main_queue()) { () -> () in
-            completion(data: "Hello, World!")
-        }
-    }
-}
-
-func dispatch_after(delay: Double, queue: dispatch_queue_t, closure: ()->())
-{
-    let dtime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC)))
-    dispatch_after(dtime, queue) { () -> Void in
-        closure()
-    }
-}
 ```
+
+By using `USAsyncBlockOperation`, the operations aren't considered to be "finished" until we set `asynchronousPortionIsFinished` to `true`, which happens after the network request returns.  Thus, the serial queue behaves as we expect (you see one result per second printed out in the console):
 
 ## License
 
