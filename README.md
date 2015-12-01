@@ -3,7 +3,7 @@ An NSBlockOperation subclass which can tolerate asynchronous calls from within i
 
 ## The Problem
 
-Calling asynchronous methods from within the block of an `NSBlockOperation` will lead to concurrency problems when being used with a serial operation queue (i.e. `NSOperationQueue.maxConcurrentOperationCount` = 1).
+Calling asynchronous methods from within the block of an `NSBlockOperation` will lead to problems when being used with an operation queue which is concurrency limited (i.e. `NSOperationQueue.maxConcurrentOperationCount` = 1).
 
 The problem is that the `NSBlockOperation` is considred "done" as soon as the block returns.  If your block simply calls an asynchronous method (e.g. a network fetch), the block will return almost immediately.
 
