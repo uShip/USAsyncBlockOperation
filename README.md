@@ -3,7 +3,7 @@ An NSBlockOperation subclass which can tolerate asynchronous calls from within i
 
 ## The Problem
 
-Calling asynchronous methods from within the block of an `NSBlockOperation` will lead to problems when being used with an operation queue which is concurrency limited (i.e. `NSOperationQueue.maxConcurrentOperationCount` = 1).
+Calling asynchronous methods from within the block of an `NSBlockOperation` will lead to problems when being used with an operation queue which is concurrency limited (i.e. `NSOperationQueue.maxConcurrentOperationCount = 1`).
 
 The problem is that the `NSBlockOperation` is considred "done" as soon as the block returns.  If your block simply calls an asynchronous method (e.g. a network fetch), the block will return almost immediately.
 
@@ -107,6 +107,8 @@ Here is a revised version of `func doIt()` which solves this problem:
 ```
 
 By using `USAsyncBlockOperation`, the operations aren't considered to be "finished" until we set `asynchronousPortionIsFinished` to `true`, which happens after the network request returns.  Thus, the serial queue behaves as we expect (you see one result per second printed out in the console).
+
+A more useful example would be rate-limiting our network requests, such that we only allow 3 requests in-flight at any one time.  When using `USAsyncBlockOperation`, this is as simple a setting `maxConcurrentOperationCount = 3`.
 
 ## See Also:
 
