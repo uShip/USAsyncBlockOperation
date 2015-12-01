@@ -123,7 +123,7 @@ dispatch onto the main thread, but will also abide by the `maxConcurrentOperatio
 ## See Also:
 
 * https://developer.apple.com/library/ios/documentation/Cocoa/Reference/NSOperation_class/
-* also http://nshipster.com/nsoperation/
+* http://nshipster.com/nsoperation/
 
 ## License
 
