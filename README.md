@@ -108,6 +108,8 @@ Here is a revised version of `func doIt()` which solves this problem:
 
 By using `USAsyncBlockOperation`, the operations aren't considered to be "finished" until we set `asynchronousPortionIsFinished` to `true`, which happens after the network request returns.  Thus, the serial queue behaves as we expect (you see one result per second printed out in the console).
 
+Note also the use of `[weak self, weak op]`, which prevents retain cycles.
+
 A more useful example would be rate-limiting our network requests, such that we only allow 3 requests in-flight at any one time.  When using `USAsyncBlockOperation`, this is as simple a setting `maxConcurrentOperationCount = 3`.
 
 ## See Also:
